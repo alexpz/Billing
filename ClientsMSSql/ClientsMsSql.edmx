@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ClientsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClientCodes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="client_ID" Type="int" />
+          <Property Name="code_ID" Type="int" />
+        </EntityType>
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="DateOfAccident" Type="datetime" />
+          <Property Name="Attorney" Type="nvarchar" MaxLength="200" />
+          <Property Name="PropertyDamage" Type="nvarchar" MaxLength="2000" />
+          <Property Name="InsuranceCompany" Type="nvarchar" MaxLength="200" />
+          <Property Name="Liability" Type="nvarchar" MaxLength="200" />
+          <Property Name="Mri" Type="datetime" />
+          <Property Name="Consultation" Type="nvarchar" MaxLength="200" />
+          <Property Name="PainControl" Type="nvarchar" MaxLength="200" />
+          <Property Name="ShockWave" Type="nvarchar" MaxLength="200" />
+          <Property Name="LiabilityDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Codes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="200" />
+          <Property Name="LongCodeName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="13" Scale="4" />
+        </EntityType>
+        <Association Name="FK_dbo_ClientCodes_dbo_Clients_client_ID">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="0..1" />
+          <End Role="ClientCodes" Type="Self.ClientCodes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientCodes">
+              <PropertyRef Name="client_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_ClientCodes_dbo_Codes_code_ID">
+          <End Role="Codes" Type="Self.Codes" Multiplicity="0..1" />
+          <End Role="ClientCodes" Type="Self.ClientCodes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Codes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientCodes">
+              <PropertyRef Name="code_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ClientsModelStoreContainer">
+          <EntitySet Name="ClientCodes" EntityType="Self.ClientCodes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Codes" EntityType="Self.Codes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_ClientCodes_dbo_Clients_client_ID" Association="Self.FK_dbo_ClientCodes_dbo_Clients_client_ID">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ClientCodes" EntitySet="ClientCodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_ClientCodes_dbo_Codes_code_ID" Association="Self.FK_dbo_ClientCodes_dbo_Codes_code_ID">
+            <End Role="Codes" EntitySet="Codes" />
+            <End Role="ClientCodes" EntitySet="ClientCodes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ClientsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClientCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="client_ID" Type="Int32" />
+          <Property Name="code_ID" Type="Int32" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_dbo_ClientCodes_dbo_Clients_client_ID" FromRole="ClientCodes" ToRole="Clients" />
+          <NavigationProperty Name="Code" Relationship="Self.FK_dbo_ClientCodes_dbo_Codes_code_ID" FromRole="ClientCodes" ToRole="Codes" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ClientCodes" Relationship="Self.FK_dbo_ClientCodes_dbo_Clients_client_ID" FromRole="Clients" ToRole="ClientCodes" />
+          <Property Name="DateOfAccident" Type="DateTime" Precision="3" />
+          <Property Name="Attorney" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PropertyDamage" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="InsuranceCompany" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Liability" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Mri" Type="DateTime" Precision="3" />
+          <Property Name="Consultation" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PainControl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ShockWave" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LiabilityDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Code">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LongCodeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ClientCodes" Relationship="Self.FK_dbo_ClientCodes_dbo_Codes_code_ID" FromRole="Codes" ToRole="ClientCodes" />
+          <Property Name="Code1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Precision="13" Scale="4" />
+        </EntityType>
+        <Association Name="FK_dbo_ClientCodes_dbo_Clients_client_ID">
+          <End Role="Clients" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="ClientCodes" Type="Self.ClientCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientCodes">
+              <PropertyRef Name="client_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_ClientCodes_dbo_Codes_code_ID">
+          <End Role="Codes" Type="Self.Code" Multiplicity="0..1" />
+          <End Role="ClientCodes" Type="Self.ClientCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Codes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientCodes">
+              <PropertyRef Name="code_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ClientsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClientCodes" EntityType="Self.ClientCode" />
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="Codes" EntityType="Self.Code" />
+          <AssociationSet Name="FK_dbo_ClientCodes_dbo_Clients_client_ID" Association="Self.FK_dbo_ClientCodes_dbo_Clients_client_ID">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ClientCodes" EntitySet="ClientCodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_ClientCodes_dbo_Codes_code_ID" Association="Self.FK_dbo_ClientCodes_dbo_Codes_code_ID">
+            <End Role="Codes" EntitySet="Codes" />
+            <End Role="ClientCodes" EntitySet="ClientCodes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ClientsModelStoreContainer" CdmEntityContainer="ClientsEntities">
+          <EntitySetMapping Name="ClientCodes">
+            <EntityTypeMapping TypeName="ClientsModel.ClientCode">
+              <MappingFragment StoreEntitySet="ClientCodes">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="client_ID" ColumnName="client_ID" />
+                <ScalarProperty Name="code_ID" ColumnName="code_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="ClientsModel.Client">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="LiabilityDate" ColumnName="LiabilityDate" />
+                <ScalarProperty Name="ShockWave" ColumnName="ShockWave" />
+                <ScalarProperty Name="PainControl" ColumnName="PainControl" />
+                <ScalarProperty Name="Consultation" ColumnName="Consultation" />
+                <ScalarProperty Name="Mri" ColumnName="Mri" />
+                <ScalarProperty Name="Liability" ColumnName="Liability" />
+                <ScalarProperty Name="InsuranceCompany" ColumnName="InsuranceCompany" />
+                <ScalarProperty Name="PropertyDamage" ColumnName="PropertyDamage" />
+                <ScalarProperty Name="Attorney" ColumnName="Attorney" />
+                <ScalarProperty Name="DateOfAccident" ColumnName="DateOfAccident" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Codes">
+            <EntityTypeMapping TypeName="ClientsModel.Code">
+              <MappingFragment StoreEntitySet="Codes">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Code1" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LongCodeName" ColumnName="LongCodeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

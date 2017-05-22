@@ -1,0 +1,282 @@
+﻿<Window x:Class="ClientsMSSql.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientsMSSql"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="825">
+    <Window.Resources>
+        <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <!--Items bar-->
+        <Label DockPanel.Dock="Top" x:Name="ScreenLBL" Content="Clients " HorizontalAlignment="Stretch" 
+               HorizontalContentAlignment="Center">
+            <Label.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF706A6A" Offset="0"/>
+                    <GradientStop Color="White" Offset="0.992"/>
+                </LinearGradientBrush>
+            </Label.Background>
+        </Label>
+
+        <StackPanel DockPanel.Dock="Bottom"   Name="SearchBottom" Visibility="Visible" Background="LightSteelBlue">
+            <Grid Name="searchByProperty" Margin="20,20,10,10" HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+                    <Label x:Name="labelFN" Content="Search By First Name"/>
+                    <TextBox x:Name="SearchFN" Height="23" TextWrapping="Wrap" Text=""/>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                    <Label x:Name="labelLN" Content="Search By Last Name"/>
+                    <TextBox x:Name="SearchLN" Height="23" TextWrapping="Wrap" Text=""/>
+                </StackPanel>
+<!--
+                <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+                    <Label x:Name="labelDS" Content="Search By Description"/>
+                    <TextBox x:Name="SearchDS" Height="23" TextWrapping="Wrap" Text=""/>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
+                    <Label x:Name="labelADDR" Content="Search By Address"/>
+                    <TextBox x:Name="SearchADDR" Height="23" TextWrapping="Wrap" Text=""/>
+                </StackPanel>
+                -->
+                <StackPanel Grid.Row="2"   Grid.ColumnSpan="4">
+                    <Button x:Name="buttonLN" Content="Search" HorizontalAlignment="Center" Click="buttonLN_Click"/>
+                </StackPanel>
+
+
+
+            </Grid>
+        </StackPanel>
+
+        <Grid    Name="parentGrid"   Background="AntiqueWhite">
+            <Grid Name="clientsGrid"  >
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" x:Name="LeftPannelBTN">
+                    <!--
+                    <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Stretch" Margin="0,1,0,1" VerticalAlignment="Top"  Click="saveButton_Click"/>
+                    -->
+                    <Button x:Name="newCodeBTN" Content="New Code" Margin="0,1,0,1" Click="newCodeBTN_Click"/>
+                    <Button x:Name="ClientsBTN" Content="Clients" Margin="0,1,0,1" Click="ClientsBTN_Click"/>
+                    <Button x:Name="PatientInfoBTN" Content="Patient Info" Margin="0,1,0,1" Click="PatientInfoBTN_Click"/>
+                    <Button x:Name="PatientNewBTN" Content="New Patient" Margin="0,1,0,1" Click="NewPatientBTN_Click"/>
+                    <Button x:Name="BillingBTN" Content="Billing" Margin="0,1,0,1" Click="BillingBTN_Click"/>
+
+
+                </StackPanel>
+                <StackPanel x:Name="codesCreate"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Visibility="Collapsed">
+
+                    <DataGrid AutoGenerateColumns="False" ColumnWidth="*" x:Name="CreateCodeGrid" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Top"    SelectionChanged="createCodeGRD_SelectionChanged" AddingNewItem="createCodeGrid_AddingNewItem" RowEditEnding="createCodeGrid_RowEditEnding" BeginningEdit="createCodeGrid_BeginningEdit" PreviewKeyDown="createCodeGrid_PreviewKeyDown">
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Binding="{Binding Description, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Description" SortDirection="Ascending" />
+                            <DataGridTextColumn Binding="{Binding  Code1, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Code" SortDirection="Ascending" />
+                            <DataGridTextColumn Binding="{Binding  Amount, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Amount" SortDirection="Ascending"  />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+
+                <StackPanel x:Name="billingSPL"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Visibility="Collapsed">
+
+                    <Grid x:Name="BillingGRD" IsEnabled="False">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,5,5,5">
+                            <Label Content="First Name"/>
+                            <TextBox x:Name="BLGFirstNameTXB" Text="{Binding Path=FirstName}"   />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="5,5,5,5">
+                            <Label Content="Last Name"/>
+                            <TextBox x:Name="BLGLastNameTXB" Text="{Binding Path=LastName}"   />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="5,5,5,5">
+                            <Label Content="Date Of Accident"/>
+                            <TextBox x:Name="BLGDateOfAccidentTXB" Text="{Binding Path=DateOfAccident}"   />
+                        </StackPanel>
+                    </Grid>
+                    <DataGrid AutoGenerateColumns="False"  ColumnWidth="*" x:Name="clientCodesRelationGRD" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Top" 
+                           CellEditEnding="clientCodesRelationGRD_CellEditEnding" SelectionChanged="clientCodesRelationGRD_SelectionChanged" AddingNewItem="clientCodesRelationGRD_AddingNewItem" RowEditEnding="clientCodesRelationGRD_RowEditEnding" BeginningEdit="clientCodesRelationGRD_BeginningEdit" PreviewKeyDown="clientCodesRelationGRD_PreviewKeyDown" >
+                        <DataGrid.Columns>
+                            
+                            <DataGridTextColumn Binding="{Binding AddedClientCodeRelationDate, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Date" SortDirection="Ascending" />
+                            <!--
+                            <DataGridTextColumn Binding="{Binding  Description, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Description" SortDirection="Ascending" />
+                            -->
+                            <DataGridComboBoxColumn x:Name="BLCodeDGCB"    SelectedItemBinding="{Binding  Description , NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" Header="Description" SortDirection="Ascending"  />
+                            <DataGridTextColumn IsReadOnly="True"  Binding="{Binding  Code, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"    Header="Code" SortDirection="Ascending"  />
+                            <DataGridTextColumn IsReadOnly="True"  Binding="{Binding  Amount, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Amount" SortDirection="Ascending"  />
+                            
+                            <DataGridCheckBoxColumn   Binding="{Binding  Path=TodDelete, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Delete"    />
+                            
+
+ 
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Button Name="PrintButton" Content="Print " Click="Print_Click"/>
+                    <Button Name="UpdateCodeBTNs" Content="Update Patient Codes" Click="UpdateCode_Click"/>
+                </StackPanel>
+
+
+
+                <DockPanel x:Name="client3FieldGrid" Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Visibility="Visible">
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Background="YellowGreen"> 
+                        <DataGrid AutoGenerateColumns="False"  IsReadOnly="True" ColumnWidth="*" x:Name="FirstLastDofAFrid" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Stretch" Background="Aqua" >
+                       <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding FirstName, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="First Name" SortDirection="Ascending" />
+                            <DataGridTextColumn Binding="{Binding  LastName, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Last Name" SortDirection="Ascending" />
+                            <DataGridTextColumn Binding="{Binding  DateOfAccident, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Date Of Accident" SortDirection="Ascending"  />
+                             
+                            
+                            
+ 
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    </ScrollViewer>
+                </DockPanel>
+
+                <StackPanel x:Name="updatePatientInfoSPNL"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Visibility="Collapsed">
+                    <Grid x:Name="updatePatientInfoGRD">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="5,5,5,5">
+                            <Label Content="First Name"/>
+                            <TextBox x:Name="NPFirstNameTXB" Text="{Binding Path=FirstName}"   />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="5,5,5,5">
+                            <Label Content="Last Name"/>
+                            <TextBox x:Name="NPLastNameTXB"  Text="{Binding Path=LastName}"  />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="5,5,5,5">
+                            <Label Content="Date of Accident"/>
+                            <DatePicker x:Name="NPDateOfAccidentDTP"  Text="{Binding Path=DateOfAccident,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true, NotifyOnValidationError=true}"  />
+                        </StackPanel>
+                        
+                        <Label Content="Attorney"  Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Center" Margin="5,5,5,5"/>
+                        <TextBox x:Name="NPAttorneyTXB"  Text="{Binding Path=Attorney}"  Grid.Column="1"  Grid.ColumnSpan="2" Grid.Row="1" Margin="5,5,5,5" HorizontalAlignment="Stretch"/>
+
+                        <Label Content="Property Damage"  Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Center" Margin="5,5,5,5"/>
+                        <TextBox x:Name="NPPropertyDamageTXB"  Text="{Binding Path=PropertyDamage}"  Grid.Column="1"  Grid.ColumnSpan="2" Grid.Row="2" 
+                                 TextWrapping="Wrap"  AcceptsReturn="True" Margin="5,5,5,5" HorizontalAlignment="Stretch"/>
+
+                        <Label Content="Name of Insurance"  Grid.Row="3" Grid.Column="0" HorizontalContentAlignment="Center" Margin="5,5,5,5"/>
+                        <TextBox x:Name="NPNameOfInsuranceTXB"  Text="{Binding Path=InsuranceCompany}" Grid.Row="3" Grid.Column="1"  Grid.ColumnSpan="2"   Margin="5,5,5,5" HorizontalAlignment="Stretch"/>
+
+                        <Label Content="Liability"  Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Center" Margin="5,5,5,5"/>
+                        <TextBox x:Name="NPLiabilityTXB"  Text="{Binding Path=Liability}" Grid.Row="4" Grid.Column="1"  Grid.ColumnSpan="2"   Margin="5,5,5,5" HorizontalAlignment="Stretch"/>
+
+                        <Label Content="Mri"  Grid.Row="5" Grid.Column="0" HorizontalContentAlignment="Center" Margin="5,5,5,5"/>
+                        <DatePicker x:Name="NPMriDPR"  Text="{Binding Path=Mri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true, NotifyOnValidationError=true}" Grid.Row="5" Grid.Column="1"  Grid.ColumnSpan="2"   Margin="5,5,5,5" HorizontalAlignment="Stretch"/>
+
+                        <Label Content="Consultation"  Grid.Row="6" Grid.Column="0" HorizontalContentAlignment="Center" Margin="5,5,5,5"/>
+                        <TextBox x:Name="NPConsultationTXB"  Text="{Binding Path=Consultation}" Grid.Row="6" Grid.Column="1"  Grid.ColumnSpan="2"   Margin="5,5,5,5" HorizontalAlignment="Stretch"/>
+                        
+                        <Label Content="Pain Control"  Grid.Row="7" Grid.Column="0" HorizontalContentAlignment="Center" Margin="5,5,5,5"/>
+                        <TextBox x:Name="NPPainControlTXB"  Text="{Binding Path=PainControl}" Grid.Row="7" Grid.Column="1"  Grid.ColumnSpan="2"   Margin="5,5,5,5" HorizontalAlignment="Stretch"/>
+                        
+                        <Label Content="Shock Wave"  Grid.Row="8" Grid.Column="0" HorizontalContentAlignment="Center" Margin="5,5,5,5"/>
+                        <TextBox x:Name="NPShockWaveTXB"  Text="{Binding Path=ShockWave}" Grid.Row="8" Grid.Column="1"  Grid.ColumnSpan="2"   Margin="5,5,5,5" HorizontalAlignment="Stretch"/>
+
+
+                        <StackPanel Grid.Row="9" x:Name="UpdateDeleteClientPNL"  Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Visible">
+                            <Button x:Name="updateClientBTN" Content="Update Client"   Margin="0,1,0,1"  Click="updateClientBTN_Click"  />
+                            <Button x:Name="deleteClientBTN" Content="Delete Client"  Margin="0,1,0,1"  Click="deleteClientBTN_Click" />
+
+                        </StackPanel>
+                        <StackPanel Grid.Row="9" x:Name="createClientPNL" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+                            <Button x:Name="createClientBTN" Content="Create Client"   Margin="0,1,0,1"  Click="createClientBTN_Click"  />
+                         </StackPanel>
+
+
+                    </Grid>
+                 </StackPanel>
+
+
+                <StackPanel x:Name="WarningPatientStatusSp"  Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" Visibility="Visible">
+                    <Grid>
+                      
+                            
+                            
+                            <ListView Margin="2,2" x:Name="WarningPatientLv" Background="Beige" Foreground="Red" FontFamily="Verdana" FontSize="12" FontWeight="Bold" >
+                            <ListView.View >
+                                <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                                     
+                                    <GridViewColumn    
+                                        DisplayMemberBinding="{Binding WarningMessage}"
+                                     />
+
+                                    <GridViewColumn    
+                                        DisplayMemberBinding="{Binding FirstName}"
+                                     />
+                                    <GridViewColumn 
+                                    DisplayMemberBinding="{Binding LastName}"
+                                     />
+
+                                </GridView>
+                         </ListView.View>
+                     </ListView>
+                    </Grid>
+
+
+                </StackPanel>    
+
+            </Grid>
+
+        </Grid>
+    </DockPanel>
+</Window>
